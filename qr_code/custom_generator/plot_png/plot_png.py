@@ -1,8 +1,8 @@
-import png
 import webcolors
-from typing import List
+from typing import List, Tuple
 from itertools import product
 
+import png
 import numpy as np
 
 
@@ -52,7 +52,7 @@ def draw_matrix(
     background_rgb: List[int],
     front_rgb: List[int],
     bloc_size: int = 10,
-):
+) -> np.array:
     """
     Draw matrix:
         - Get background matrix
@@ -95,13 +95,18 @@ def get_background_matrix(
     return np.array([background_rgb * size] * size)
 
 
-def draw_values(working_matrix, value_matrix, front_rgb, bloc_size) -> np.array:
+def draw_values(
+    working_matrix: np.array,
+    value_matrix: np.array,
+    front_rgb: List[int],
+    bloc_size: int,
+) -> np.array:
     """
     Draw each value from matrix to complete the resulting matrix.
     """
     iterator = np.nditer(value_matrix, flags=["multi_index"])
     for value in iterator:
-        if value == False:
+        if not value:
             continue
 
         working_matrix = draw_bloc(
@@ -111,7 +116,12 @@ def draw_values(working_matrix, value_matrix, front_rgb, bloc_size) -> np.array:
     return working_matrix
 
 
-def draw_bloc(working_matrix, indices, front_rgb, bloc_size) -> np.array:
+def draw_bloc(
+    working_matrix: np.array,
+    indices: Tuple[int, int],
+    front_rgb: List[int],
+    bloc_size: int,
+) -> np.array:
     """
     Draw a single bloc, by looping through each pixel of the bloc and filling the pixels with front_rgb triplets.
     """

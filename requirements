@@ -1,3 +1,5 @@
 black==24.4.2
 pylint==3.1.0
 qrcode==7.4.2
+webcolors==1.13
+numpy==1.26.4

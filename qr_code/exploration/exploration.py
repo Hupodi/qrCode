@@ -1,5 +1,6 @@
 import qrcode
-img = qrcode.make('Some data here')
+
+img = qrcode.make("https://www.rugbyrama.fr/")
 type(img)  # qrcode.image.pil.PilImage
 img.save("test_output.png")
 
@@ -9,7 +10,7 @@ qr = qrcode.QRCode(
     box_size=10,
     border=4,
 )
-qr.add_data('Some data')
+qr.add_data("Some data")
 qr.make(fit=True)
 
 img = qr.make_image(back_color=(0, 195, 0), fill_color=(55, 95, 35))

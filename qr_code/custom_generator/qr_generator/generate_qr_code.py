@@ -8,11 +8,16 @@ def generate_qr_code(
     url: str,
     error_correction_level: ErrorCorrectionLevel = ErrorCorrectionLevel.H,
     quiet_zone_size: int = 4,
+    mode: str = "Byte",
 ) -> np.array:
     """
     Generate a QR code matrix corresponding to the given url.
     """
-    level = get_level(message_size=len(url), error_correction_level=error_correction_level)
+    if mode != "Byte":
+        raise ValueError("Only Byte mode is supported. Structure is there to implement the others, though.")
+
+    level = get_level(message_size=len(url), error_correction_level=error_correction_level, mode=mode)
+    mode_indicator = get_mode_indicator(mode)
 
     # Dummy output for now
     result = np.array()
@@ -28,3 +33,17 @@ def add_quiet_zone(matrix: np.array, quiet_zone_size: int) -> np.array:
     result = np.array(result, dtype=bool)
     result[quiet_zone_size:-quiet_zone_size, quiet_zone_size:-quiet_zone_size] = matrix
     return result
+
+
+def get_mode_indicator(mode: str) -> str:
+    """
+    Get mode indicator 4-bits.
+    """
+    mode_to_indicator = {
+        "Numeric": "0001",
+        "Alphanumeric": "0010",
+        "Byte": "0100",
+        "Kanji": "1000",
+        "ECI": "0111",
+    }
+    return mode_to_indicator[mode]

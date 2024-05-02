@@ -9,7 +9,7 @@ from qr_code.custom_generator.qr_generator.error_correction_level import (
 
 
 def get_level(
-    message_size: int, error_correction_level: ErrorCorrectionLevel, mode: str = "Byte"
+    message_size: int, error_correction_level: ErrorCorrectionLevel, mode: str
 ) -> int:
     """
     From message size, determine the QR code level to use, in {1, 40}.

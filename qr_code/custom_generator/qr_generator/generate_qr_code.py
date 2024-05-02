@@ -12,6 +12,11 @@ def generate_qr_code(
     """
     Generate a QR code matrix corresponding to the given url.
     """
+    level = get_level(message_size=len(url), error_correction_level=error_correction_level)
+
+    # Dummy output for now
+    result = np.array()
+    add_quiet_zone(matrix=result, quiet_zone_size=quiet_zone_size)
     return np.array
 
 

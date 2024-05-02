@@ -8,11 +8,11 @@ from qr_code.custom_generator.qr_generator.error_correction_level import (
 )
 
 
-def get_version(
+def get_level(
     message_size: int, error_correction_level: ErrorCorrectionLevel, mode: str
 ) -> int:
     """
-    From message size, determine the QR code version to use, in {1, 40}.
+    From message size, determine the QR code level to use, in {1, 40}.
     """
     table = pd.read_csv(Path(__file__).parent / "capacityTable.csv")
 
@@ -27,6 +27,6 @@ def get_version(
     except ValueError as err:
         logging.error(err)
         raise ValueError(
-            f"Message size {message_size} is too long to be supported with mode {mode} "
+            f"message size {message_size} is too long to be supported with mode {mode} "
             f"and error correction level {error_correction_level.name}."
         )

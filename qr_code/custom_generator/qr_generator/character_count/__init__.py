@@ -1,1 +1,1 @@
-from .get_character_count import get_character_count
+from .get_character_count import get_character_count_indicator

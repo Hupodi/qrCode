@@ -3,7 +3,7 @@ from pathlib import Path
 import pandas as pd
 
 
-def get_character_count(url: str, version: int, mode: str = "Byte") -> str:
+def get_character_count_indicator(url: str, version: int, mode: str = "Byte") -> str:
     """
     From the input URL and the version, get the character count indicator.
     Should also depend on the mode, but we're supporting bytes only.

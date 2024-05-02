@@ -1,7 +1,8 @@
 import numpy as np
 
 from qr_code.custom_generator.qr_generator.error_correction_level import ErrorCorrectionLevel
-from qr_code.custom_generator.qr_generator.level import get_level
+from qr_code.custom_generator.qr_generator.version import get_version
+from qr_code.custom_generator.qr_generator.character_count import get_character_count
 
 
 def generate_qr_code(
@@ -16,8 +17,10 @@ def generate_qr_code(
     if mode != "Byte":
         raise ValueError("Only Byte mode is supported. Structure is there to implement the others, though.")
 
-    level = get_level(message_size=len(url), error_correction_level=error_correction_level, mode=mode)
+    version = get_version(message_size=len(url), error_correction_level=error_correction_level, mode=mode)
     mode_indicator = get_mode_indicator(mode)
+    get_character_count(url=url, version=version, mode=mode)
+
 
     # Dummy output for now
     result = np.array()

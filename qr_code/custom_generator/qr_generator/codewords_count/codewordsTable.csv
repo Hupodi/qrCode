@@ -1,4 +1,4 @@
-Version,Error Correction Level,Total Number of Data Codewords,EC Codewords Per Block,Number of Blocks in Group 1,Number of Data Codewords in Each of Group 1's Blocks,Number of Blocks in Group 2,Number of Data Codewords in Each of Group 2's Blocks
+Version,EC Level,Codewords,EC Codewords Per Block,Group 1 Blocks,Group 1 Codewords Per Blocks,Group 2 BlocksGroup 2 Codewords Per Blocks
 1,L,19,7,1,19,,
 1,M,16,10,1,16,,
 1,Q,13,13,1,13,,

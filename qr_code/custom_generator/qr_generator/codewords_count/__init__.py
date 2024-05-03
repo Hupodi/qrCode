@@ -1,1 +1,1 @@
-from .get_codewords_count import get_codewords_count
+from .get_codewords_count import get_codewords_count, CODEWORDS_TABLE

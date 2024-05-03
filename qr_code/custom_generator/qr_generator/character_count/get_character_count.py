@@ -11,7 +11,7 @@ def get_character_count_indicator(url: str, version: int, mode: str = "Byte") ->
     bits_count_table = pd.read_csv(Path(__file__).parent / "characterCountTable.csv")
 
     bits_count = bits_count_table.loc[
-            bits_count_table["Version"] == version, mode
-        ].squeeze()
+        bits_count_table["Version"] == version, mode
+    ].squeeze()
 
     return f"{len(url):0{bits_count}b}"

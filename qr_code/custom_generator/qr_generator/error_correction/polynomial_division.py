@@ -5,10 +5,11 @@ from .generator_polynomials import get_int, get_exponent
 
 def divide_polynomials(quotien: List[int], divisor: List[int]) -> List[int]:
     """
-    Polynomial division
+    Polynomial division, where quotien and division are Lists of integers {0, 255}.
+    Divisor should be exponents of 2.
     """
     steps = len(quotien)
-    running_quotien = quotien
+    running_quotien = [get_exponent(int_value) for int_value in quotien]
 
     for step in range(steps):
 
@@ -17,22 +18,19 @@ def divide_polynomials(quotien: List[int], divisor: List[int]) -> List[int]:
 
         # XOR
         result = []
-        for index, quotien_exponent in enumerate(running_quotien):
+        for index in range(max(len(running_quotien), len(multiplied_polynomial))):
+
+            quotien_int = get_int(running_quotien[index]) if index < len(running_quotien) else 0
+            divisor_int = get_int(multiplied_polynomial[index]) if index < len(multiplied_polynomial) else 0
 
             if index == 0:
-                if get_int(quotien_exponent) ^ get_int(multiplied_polynomial[index]) != 0:
+                if quotien_int ^ divisor_int != 0:
                     raise ValueError
                 continue
 
-            divisor_int = get_int(multiplied_polynomial[index]) if index < len(multiplied_polynomial) else 0
-            result.append(get_int(quotien_exponent) ^ divisor_int)
-
-        if len(running_quotien) < len(divisor):
-            divisor_int = get_int(multiplied_polynomial[index + 1]) if (index + 1) < len(multiplied_polynomial) else 0
-            result.append(divisor_int)
+            result.append(quotien_int ^ divisor_int)
 
         running_quotien = [get_exponent(int_value) for int_value in result]
-
     return result
 
 

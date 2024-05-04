@@ -9,7 +9,7 @@ from qr_code.custom_generator.qr_generator.character_count import (
 )
 from qr_code.custom_generator.qr_generator.encode_data import encode_data
 from qr_code.custom_generator.qr_generator.codewords_count import get_codewords_count
-from qr_code.custom_generator.qr_generator.error_correction import get_corrected_bits
+from qr_code.custom_generator.qr_generator.error_correction import encode_message
 
 
 def generate_qr_code(
@@ -44,7 +44,8 @@ def generate_qr_code(
         bits=raw_data_bits, codewords_count=codewords_count
     )
 
-    corrected_bits = get_corrected_bits(raw_data_bits)
+    corrected_bits = encode_message(raw_data_bits=raw_data_bits, version=version)
+
 
     # Dummy output for now
     result = np.array()

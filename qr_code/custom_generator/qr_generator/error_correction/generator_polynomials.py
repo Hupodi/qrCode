@@ -58,4 +58,7 @@ def get_exponent(int_value: int) -> int:
     """
     From int get exponent
     """
+    if int_value == 0:
+        return 0
+
     return int(LOG_TABLE.loc[LOG_TABLE["Integer"] == int_value, "Exponent"].iloc[0].squeeze())

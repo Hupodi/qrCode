@@ -17,7 +17,10 @@ def get_all_generator_polynomials(n: int = 68):
     for degree in range(2, n + 1):
         result[degree] = get_next_polynomial(result[degree - 1])
 
-    with open("qr_code/custom_generator/qr_generator/error_correction/generatorPolynomial.json", "w") as f:
+    with open(
+        "qr_code/custom_generator/qr_generator/error_correction/generatorPolynomial.json",
+        "w",
+    ) as f:
         json.dump(result, f)
 
 
@@ -61,4 +64,6 @@ def get_exponent(int_value: int) -> int:
     if int_value == 0:
         return 0
 
-    return int(LOG_TABLE.loc[LOG_TABLE["Integer"] == int_value, "Exponent"].iloc[0].squeeze())
+    return int(
+        LOG_TABLE.loc[LOG_TABLE["Integer"] == int_value, "Exponent"].iloc[0].squeeze()
+    )

@@ -12,16 +12,22 @@ def divide_polynomials(quotien: List[int], divisor: List[int]) -> List[int]:
     running_quotien = [get_exponent(int_value) for int_value in quotien]
 
     for step in range(steps):
-
         multiplication_exponent = running_quotien[0]
-        multiplied_polynomial = [(exponent + multiplication_exponent) % 255 for exponent in divisor]
+        multiplied_polynomial = [
+            (exponent + multiplication_exponent) % 255 for exponent in divisor
+        ]
 
         # XOR
         result = []
         for index in range(max(len(running_quotien), len(multiplied_polynomial))):
-
-            quotien_int = get_int(running_quotien[index]) if index < len(running_quotien) else 0
-            divisor_int = get_int(multiplied_polynomial[index]) if index < len(multiplied_polynomial) else 0
+            quotien_int = (
+                get_int(running_quotien[index]) if index < len(running_quotien) else 0
+            )
+            divisor_int = (
+                get_int(multiplied_polynomial[index])
+                if index < len(multiplied_polynomial)
+                else 0
+            )
 
             if index == 0:
                 if quotien_int ^ divisor_int != 0:

@@ -20,9 +20,12 @@ def split_blocks(
     group_1 = []
     group_2 = []
     for byte_index in range(len(bits) // 8):
-        codeword_int = bits_str_to_int(bits[(8 * byte_index):(8 * (byte_index + 1))])
+        codeword_int = bits_str_to_int(bits[(8 * byte_index) : (8 * (byte_index + 1))])
 
-        if (len(group_1) < config["Group 1 Blocks"]) or (len(group_1) == config["Group 1 Blocks"] and len(group_1[-1]) < config["Group 1 Codewords Per Block"]):
+        if (len(group_1) < config["Group 1 Blocks"]) or (
+            len(group_1) == config["Group 1 Blocks"]
+            and len(group_1[-1]) < config["Group 1 Codewords Per Block"]
+        ):
             if len(group_1[-1]) < config["Group 1 Codewords Per Block"]:
                 group_1[-1].append(codeword_int)
             else:

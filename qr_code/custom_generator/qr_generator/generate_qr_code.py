@@ -46,7 +46,9 @@ def generate_qr_code(
     )
 
     corrected_bits = encode_message(raw_data_bits=raw_data_bits, version=version)
-    matrix = get_qr_matrix(bits=corrected_bits, version=version, quiet_zone_size=quiet_zone_size)
+    matrix = get_qr_matrix(
+        bits=corrected_bits, version=version, quiet_zone_size=quiet_zone_size
+    )
 
     return matrix
 

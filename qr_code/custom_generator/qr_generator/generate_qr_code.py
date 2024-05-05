@@ -10,6 +10,7 @@ from qr_code.custom_generator.qr_generator.character_count import (
 from qr_code.custom_generator.qr_generator.encode_data import encode_data
 from qr_code.custom_generator.qr_generator.codewords_count import get_codewords_count
 from qr_code.custom_generator.qr_generator.error_correction import encode_message
+from qr_code.custom_generator.qr_generator.qr_matrix import get_qr_matrix
 
 
 def generate_qr_code(
@@ -45,22 +46,9 @@ def generate_qr_code(
     )
 
     corrected_bits = encode_message(raw_data_bits=raw_data_bits, version=version)
+    matrix = get_qr_matrix(bits=corrected_bits, version=version, quiet_zone_size=quiet_zone_size)
 
-
-    # Dummy output for now
-    result = np.array()
-    add_quiet_zone(matrix=result, quiet_zone_size=quiet_zone_size)
-    return np.array
-
-
-def add_quiet_zone(matrix: np.array, quiet_zone_size: int) -> np.array:
-    """
-    Add the quiet zone around the matrix.
-    """
-    result = np.zeros([size + 2 * quiet_zone_size for size in matrix.shape])
-    result = np.array(result, dtype=bool)
-    result[quiet_zone_size:-quiet_zone_size, quiet_zone_size:-quiet_zone_size] = matrix
-    return result
+    return matrix
 
 
 def get_mode_indicator(mode: str) -> str:

@@ -14,7 +14,7 @@ with open("qr_code/custom_generator/qr_generator/error_correction/generatorPolyn
 REMAINDER_BITS = pd.read_csv("qr_code/custom_generator/qr_generator/error_correction/remainderBits.csv")
 
 
-def encode_message(raw_data_bits: str, version: int, error_correction_level: ErrorCorrectionLevel) -> None:
+def encode_message(raw_data_bits: str, version: int, error_correction_level: ErrorCorrectionLevel) -> str:
     """
     Encode the message
     """

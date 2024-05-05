@@ -32,6 +32,9 @@ def get_qr_matrix(bits: str, version: int, quiet_zone_size: int) -> np.array:
     written_matrix = reserve_format_information(
         written_matrix
     )
+    written_matrix = reserve_version_information(
+        written_matrix
+    )
 
     matrix = add_quiet_zone(matrix=matrix, quiet_zone_size=quiet_zone_size)
     # Debugging:
@@ -202,6 +205,19 @@ def reserve_format_information(written_matrix: np.array) -> np.array:
     for index in range(1, 9):
         written_matrix[size - index, 8] = True
         written_matrix[8, size - index] = True
+
+    return written_matrix
+
+
+def reserve_version_information(written_matrix: np.array) -> np.array:
+    """
+    Reserve cells for version information.
+    """
+    size = written_matrix.shape[0]
+    for i in range(3):
+        for j in range(6):
+            written_matrix[j, size - 11 + i] = True
+            written_matrix[size - 11 + i, j] = True
 
     return written_matrix
 

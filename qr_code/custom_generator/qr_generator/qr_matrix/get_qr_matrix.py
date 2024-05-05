@@ -23,6 +23,15 @@ def get_qr_matrix(bits: str, version: int, quiet_zone_size: int) -> np.array:
     matrix, written_matrix = add_alignment_patterns(
         matrix=matrix, written_matrix=written_matrix, version=version
     )
+    matrix, written_matrix = add_timing_patterns(
+        matrix=matrix, written_matrix=written_matrix
+    )
+    matrix, written_matrix = add_dark_module(
+        matrix=matrix, written_matrix=written_matrix
+    )
+    written_matrix = reserve_format_information(
+        written_matrix
+    )
 
     matrix = add_quiet_zone(matrix=matrix, quiet_zone_size=quiet_zone_size)
     # Debugging:
@@ -155,6 +164,46 @@ def add_alignment_pattern(
         matrix[indices] = True
 
     return matrix, written_matrix
+
+
+def add_timing_patterns(matrix: np.array, written_matrix: np.array) -> Tuple[np.array, np.array]:
+    """
+    Add timing patterns: row 6 and col 6. No need to worry about alignment patterns, they always coincide.
+    """
+    alternating_value = True  # Start with a black square
+    for index in range(6, matrix.shape[0] - 7):
+        matrix[6, index] = alternating_value
+        matrix[index, 6] = alternating_value
+        written_matrix[index, 6] = True
+        written_matrix[6, index] = True
+        alternating_value = not alternating_value
+
+    return matrix, written_matrix
+
+
+def add_dark_module(matrix: np.array, written_matrix: np.array) -> Tuple[np.array, np.array]:
+    """
+    Add a single dark cell next to the bottom right finder pattern.
+    """
+    position = matrix.shape[0] - 8
+    matrix[position, 8] = True
+    written_matrix[position, 8] = True
+    return matrix, written_matrix
+
+
+def reserve_format_information(written_matrix: np.array) -> np.array:
+    """
+    Reserve the spots for format information.
+    """
+    size = written_matrix.shape[0]
+    for index in range(9):
+        written_matrix[index, 8] = True
+        written_matrix[8, index] = True
+    for index in range(1, 9):
+        written_matrix[size - index, 8] = True
+        written_matrix[8, size - index] = True
+
+    return written_matrix
 
 
 def add_quiet_zone(matrix: np.array, quiet_zone_size: int) -> np.array:

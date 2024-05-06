@@ -1,3 +1,4 @@
+import logging
 from typing import Tuple
 from itertools import product
 from pathlib import Path
@@ -34,6 +35,10 @@ def get_qr_matrix(bits: str, version: int, quiet_zone_size: int) -> np.array:
     )
     written_matrix = reserve_version_information(
         written_matrix
+    )
+
+    matrix, written_matrix = place_bits(
+        matrix=matrix, written_matrix=written_matrix, bits=bits
     )
 
     matrix = add_quiet_zone(matrix=matrix, quiet_zone_size=quiet_zone_size)
@@ -220,6 +225,44 @@ def reserve_version_information(written_matrix: np.array) -> np.array:
             written_matrix[size - 11 + i, j] = True
 
     return written_matrix
+
+
+def place_bits(matrix: np.array, written_matrix: np.array, bits: str) -> Tuple[np.array, np.array]:
+    """
+    Place data bits in the matrix.
+    """
+    if len(bits) != sum(sum(written_matrix)):
+        raise ValueError(f"Encoded message Bits size {len(bits)} is different than the available slots in the matrix ({sum(sum(written_matrix))}).")
+    row_direction = -1
+    row = matrix.shape[0] - 1
+    column = matrix.shape[0] - 1
+    column_offset = False
+
+    for i, bit in enumerate(bits):
+
+        while written_matrix[row, column - column_offset] == True:
+            logging.error(f"{row}, {column - column_offset}")
+            row_direction, row, column, column_offset = move_cursor(row_direction, row, column, column_offset, matrix.shape[0])
+
+        logging.error(f"Actually writing {row}, {column - column_offset}")
+        logging.error(i)
+        matrix[row, column - column_offset] = (bit == "1")
+        written_matrix[row, column - column_offset] = True
+
+    return matrix, written_matrix
+
+
+def move_cursor(row_direction: int, row: int, column: int, column_offset: bool, size: int) -> Tuple[int, int, int, bool]:
+    """
+    Move the filling bits cursor, respecting the logic.
+    """
+    if column_offset is False:
+        return row_direction, row, column, True
+    if 0 <= (row + row_direction) < size:
+        return row_direction, row + row_direction, column, False
+    if column - 2 == 6:
+        return - row_direction, row, column - 3, False
+    return - row_direction, row, column - 2, False
 
 
 def add_quiet_zone(matrix: np.array, quiet_zone_size: int) -> np.array:

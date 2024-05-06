@@ -10,8 +10,6 @@ from qr_code.custom_generator.qr_generator.error_correction.split_blocks import 
     split_blocks,
 )
 from qr_code.custom_generator.qr_generator.error_correction.polynomial_division import (
-    get_int,
-    get_exponent,
     divide_polynomials,
 )
 

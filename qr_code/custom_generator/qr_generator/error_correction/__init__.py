@@ -1,1 +1,1 @@
-from encode_message import encode_message
+from .encode_message import encode_message

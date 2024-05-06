@@ -26,12 +26,12 @@ def split_blocks(
             len(group_1) == config["Group 1 Blocks"]
             and len(group_1[-1]) < config["Group 1 Codewords Per Block"]
         ):
-            if len(group_1[-1]) < config["Group 1 Codewords Per Block"]:
+            if len(group_1) > 0 and len(group_1[-1]) < config["Group 1 Codewords Per Block"]:
                 group_1[-1].append(codeword_int)
             else:
                 group_1.append([codeword_int])
         else:
-            if len(group_2[-1]) < config["Group 2 Codewords Per Block"]:
+            if len(group_2) > 0 and len(group_2[-1]) < config["Group 2 Codewords Per Block"]:
                 group_2[-1].append(codeword_int)
             else:
                 group_2.append([codeword_int])

@@ -46,7 +46,7 @@ def generate_qr_code(
     )
 
     corrected_bits = encode_message(raw_data_bits=raw_data_bits, version=version, error_correction_level=error_correction_level)
-    matrix = get_qr_matrix(
+    matrix, protected_matrix = get_qr_matrix(
         bits=corrected_bits, version=version, quiet_zone_size=quiet_zone_size
     )
 
@@ -79,7 +79,7 @@ def ensure_multiple_of_eight(bits: str) -> str:
     Ensure the data bits length is a multiple of 8, by adding 0s at the end.
     """
     remainder = len(bits) % 8
-    return bits + "0" * remainder
+    return bits + "0" * (8 - remainder)
 
 
 def fill_to_max_size(bits: str, codewords_count: int) -> str:

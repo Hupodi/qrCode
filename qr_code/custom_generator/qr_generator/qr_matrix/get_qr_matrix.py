@@ -10,7 +10,7 @@ from qr_code.custom_generator.plot_png import plot_png
 ALIGNMENT_PATTERNS_TABLE = pd.read_csv("qr_code/custom_generator/qr_generator/qr_matrix/AlignmentPatterns.csv")
 
 
-def get_qr_matrix(bits: str, version: int, quiet_zone_size: int) -> Tuple[np.array, np.array]:
+def get_qr_matrix(bits: str, version: int) -> Tuple[np.array, np.array]:
     """
     From the encoded bits get the QR code boolean matrix
     """
@@ -39,7 +39,6 @@ def get_qr_matrix(bits: str, version: int, quiet_zone_size: int) -> Tuple[np.arr
         matrix=matrix, protected_matrix=protected_matrix, bits=bits
     )
 
-    matrix = add_quiet_zone(matrix=matrix, quiet_zone_size=quiet_zone_size)
     # Debugging:
     plot_png(matrix=matrix, output_file="test_matrix.png")
     plot_png(matrix=protected_matrix, output_file="test_protected_matrix_matrix.png")
@@ -261,13 +260,3 @@ def move_cursor(row_direction: int, row: int, column: int, column_offset: bool, 
     if column - 2 == 6:
         return - row_direction, row, column - 3, False
     return - row_direction, row, column - 2, False
-
-
-def add_quiet_zone(matrix: np.array, quiet_zone_size: int) -> np.array:
-    """
-    Add the quiet zone around the matrix.
-    """
-    result = np.zeros([size + 2 * quiet_zone_size for size in matrix.shape])
-    result = np.array(result, dtype=bool)
-    result[quiet_zone_size:-quiet_zone_size, quiet_zone_size:-quiet_zone_size] = matrix
-    return result

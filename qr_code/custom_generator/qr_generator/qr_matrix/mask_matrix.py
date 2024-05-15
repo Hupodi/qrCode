@@ -1,6 +1,7 @@
 import copy
 from itertools import product
 import math
+from typing import Tuple
 
 import numpy as np
 
@@ -21,19 +22,21 @@ mask_methods = [
 ]
 
 
-def mask_matrix(matrix: np.array, protected_matrix: np.array) -> np.array:
+def mask_matrix(matrix: np.array, protected_matrix: np.array) -> Tuple[np.array, str]:
     """
     Apply data masking: Evaluate each of the 8 masking patterns according to the 4 criterion, apply the correct one.
     """
     min_penalty = np.inf
     selected_mask = None
-    for mask_method in mask_methods:
+    mask_string = None
+    for mask_number, mask_method in enumerate(mask_methods):
         penalty = get_penalty_score(mask_method(matrix=matrix, protected_matrix=protected_matrix))
         if penalty < min_penalty:
             min_penalty = penalty
             selected_mask = mask_method
+            mask_string = "{0:03b}".format(mask_number)
 
-    return selected_mask(matrix=matrix, protected_matrix=protected_matrix)
+    return selected_mask(matrix=matrix, protected_matrix=protected_matrix), mask_string
 
 
 def get_penalty_score(matrix: np.array) -> int:

@@ -4,8 +4,6 @@ from itertools import product
 import numpy as np
 import pandas as pd
 
-from qr_code.custom_generator.plot_png import plot_png
-
 
 ALIGNMENT_PATTERNS_TABLE = pd.read_csv("qr_code/custom_generator/qr_generator/qr_matrix/AlignmentPatterns.csv")
 
@@ -38,10 +36,6 @@ def get_qr_matrix(bits: str, version: int) -> Tuple[np.array, np.array]:
     matrix, protected_matrix = place_bits(
         matrix=matrix, protected_matrix=protected_matrix, bits=bits
     )
-
-    # Debugging:
-    plot_png(matrix=matrix, output_file="test_matrix.png")
-    plot_png(matrix=protected_matrix, output_file="test_protected_matrix_matrix.png")
 
     return matrix, protected_matrix
 

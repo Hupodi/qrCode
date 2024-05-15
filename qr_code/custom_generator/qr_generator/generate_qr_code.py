@@ -10,7 +10,7 @@ from qr_code.custom_generator.qr_generator.character_count import (
 from qr_code.custom_generator.qr_generator.encode_data import encode_data
 from qr_code.custom_generator.qr_generator.codewords_count import get_codewords_count
 from qr_code.custom_generator.qr_generator.error_correction import encode_message
-from qr_code.custom_generator.qr_generator.qr_matrix import get_qr_matrix
+from qr_code.custom_generator.qr_generator.qr_matrix import get_qr_matrix, mask_matrix
 
 
 def generate_qr_code(
@@ -50,7 +50,7 @@ def generate_qr_code(
         bits=corrected_bits, version=version
     )
     matrix, protected_matrix = mask_matrix(
-        bits=corrected_bits
+        matrix=matrix, protected_matrix=protected_matrix
     )
     matrix = add_quiet_zone(matrix=matrix, quiet_zone_size=quiet_zone_size)
 

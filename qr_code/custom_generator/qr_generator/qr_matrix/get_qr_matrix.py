@@ -244,7 +244,8 @@ def place_bits(matrix: np.array, protected_matrix: np.array, bits: str) -> Tuple
             row_direction, row, column, column_offset = move_cursor(row_direction, row, column, column_offset, matrix.shape[0])
 
         matrix[row, column - column_offset] = (bit == "1")
-        protected_matrix[row, column - column_offset] = True
+        row_direction, row, column, column_offset = move_cursor(row_direction, row, column, column_offset,
+                                                                matrix.shape[0])
 
     return matrix, protected_matrix
 

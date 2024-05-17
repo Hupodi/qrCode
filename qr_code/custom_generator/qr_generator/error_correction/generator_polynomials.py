@@ -5,7 +5,9 @@ import json
 import pandas as pd
 
 
-LOG_TABLE = pd.read_csv(Path(__file__).parent / "LogTable.csv")
+LOG_TABLE = pd.read_csv(
+    "qr_code/custom_generator/qr_generator/error_correction/LogTable.csv"
+)
 
 
 def get_all_generator_polynomials(n: int = 68):

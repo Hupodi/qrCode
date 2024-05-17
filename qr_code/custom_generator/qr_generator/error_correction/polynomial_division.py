@@ -9,19 +9,20 @@ def divide_polynomials(quotien: List[int], divisor: List[int]) -> List[int]:
     Divisor should be exponents of 2.
     """
     steps = len(quotien)
-    running_quotien = [get_exponent(int_value) for int_value in quotien]
+    # running_quotien = [get_exponent(int_value) for int_value in quotien]
+    running_quotien_ints = quotien
 
     for step in range(steps):
-        multiplication_exponent = running_quotien[0]
+        multiplication_exponent = get_exponent(running_quotien_ints[0])
         multiplied_polynomial = [
             (exponent + multiplication_exponent) % 255 for exponent in divisor
         ]
 
         # XOR
         result = []
-        for index in range(max(len(running_quotien), len(multiplied_polynomial))):
+        for index in range(max(len(running_quotien_ints), len(multiplied_polynomial))):
             quotien_int = (
-                get_int(running_quotien[index]) if index < len(running_quotien) else 0
+                running_quotien_ints[index] if index < len(running_quotien_ints) else 0
             )
             divisor_int = (
                 get_int(multiplied_polynomial[index])
@@ -36,7 +37,7 @@ def divide_polynomials(quotien: List[int], divisor: List[int]) -> List[int]:
 
             result.append(quotien_int ^ divisor_int)
 
-        running_quotien = [get_exponent(int_value) for int_value in result]
+        running_quotien_ints = result
     return result
 
 

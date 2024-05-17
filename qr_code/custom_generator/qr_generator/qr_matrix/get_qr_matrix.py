@@ -5,7 +5,9 @@ import numpy as np
 import pandas as pd
 
 
-ALIGNMENT_PATTERNS_TABLE = pd.read_csv("qr_code/custom_generator/qr_generator/qr_matrix/AlignmentPatterns.csv")
+ALIGNMENT_PATTERNS_TABLE = pd.read_csv(
+    "qr_code/custom_generator/qr_generator/qr_matrix/AlignmentPatterns.csv"
+)
 
 
 def get_qr_matrix(bits: str, version: int) -> Tuple[np.array, np.array]:
@@ -26,9 +28,7 @@ def get_qr_matrix(bits: str, version: int) -> Tuple[np.array, np.array]:
     matrix, protected_matrix = add_dark_module(
         matrix=matrix, protected_matrix=protected_matrix
     )
-    protected_matrix = reserve_format_information(
-        protected_matrix
-    )
+    protected_matrix = reserve_format_information(protected_matrix)
     protected_matrix = reserve_version_information(
         version=version, protected_matrix=protected_matrix
     )
@@ -47,7 +47,9 @@ def get_matrix_size(version: int) -> int:
     return 17 + 4 * version
 
 
-def add_finder_patterns(matrix, protected_matrix: np.array) -> Tuple[np.array, np.array]:
+def add_finder_patterns(
+    matrix, protected_matrix: np.array
+) -> Tuple[np.array, np.array]:
     """
     Add the three finder patterns to the matrix. Write them as protected in the protected_matrix
     """
@@ -165,7 +167,9 @@ def add_alignment_pattern(
     return matrix, protected_matrix
 
 
-def add_timing_patterns(matrix: np.array, protected_matrix: np.array) -> Tuple[np.array, np.array]:
+def add_timing_patterns(
+    matrix: np.array, protected_matrix: np.array
+) -> Tuple[np.array, np.array]:
     """
     Add timing patterns: row 6 and col 6. No need to worry about alignment patterns, they always coincide.
     """
@@ -180,7 +184,9 @@ def add_timing_patterns(matrix: np.array, protected_matrix: np.array) -> Tuple[n
     return matrix, protected_matrix
 
 
-def add_dark_module(matrix: np.array, protected_matrix: np.array) -> Tuple[np.array, np.array]:
+def add_dark_module(
+    matrix: np.array, protected_matrix: np.array
+) -> Tuple[np.array, np.array]:
     """
     Add a single dark cell next to the bottom right finder pattern.
     """
@@ -221,30 +227,38 @@ def reserve_version_information(version: int, protected_matrix: np.array) -> np.
     return protected_matrix
 
 
-def place_bits(matrix: np.array, protected_matrix: np.array, bits: str) -> Tuple[np.array, np.array]:
+def place_bits(
+    matrix: np.array, protected_matrix: np.array, bits: str
+) -> Tuple[np.array, np.array]:
     """
     Place data bits in the matrix.
     """
     if len(bits) != (matrix.shape[0] ** 2 - protected_matrix.sum()):
-        raise ValueError(f"Encoded message Bits size {len(bits)} is different than the available slots in the matrix ({(matrix.shape[0] ** 2 - protected_matrix.sum())}).")
+        raise ValueError(
+            f"Encoded message Bits size {len(bits)} is different than the available slots in the matrix ({(matrix.shape[0] ** 2 - protected_matrix.sum())})."
+        )
     row_direction = -1
     row = matrix.shape[0] - 1
     column = matrix.shape[0] - 1
     column_offset = False
 
     for i, bit in enumerate(bits):
-
         while protected_matrix[row, column - column_offset] == True:
-            row_direction, row, column, column_offset = move_cursor(row_direction, row, column, column_offset, matrix.shape[0])
+            row_direction, row, column, column_offset = move_cursor(
+                row_direction, row, column, column_offset, matrix.shape[0]
+            )
 
-        matrix[row, column - column_offset] = (bit == "1")
-        row_direction, row, column, column_offset = move_cursor(row_direction, row, column, column_offset,
-                                                                matrix.shape[0])
+        matrix[row, column - column_offset] = bit == "1"
+        row_direction, row, column, column_offset = move_cursor(
+            row_direction, row, column, column_offset, matrix.shape[0]
+        )
 
     return matrix, protected_matrix
 
 
-def move_cursor(row_direction: int, row: int, column: int, column_offset: bool, size: int) -> Tuple[int, int, int, bool]:
+def move_cursor(
+    row_direction: int, row: int, column: int, column_offset: bool, size: int
+) -> Tuple[int, int, int, bool]:
     """
     Move the filling bits cursor, respecting the logic.
     """
@@ -253,5 +267,5 @@ def move_cursor(row_direction: int, row: int, column: int, column_offset: bool, 
     if 0 <= (row + row_direction) < size:
         return row_direction, row + row_direction, column, False
     if column - 2 == 6:
-        return - row_direction, row, column - 3, False
-    return - row_direction, row, column - 2, False
+        return -row_direction, row, column - 3, False
+    return -row_direction, row, column - 2, False

@@ -17,25 +17,22 @@ mask_formulas = [
     lambda i, j: ((i + j) % 2 + (i * j) % 3) % 2 == 0,
 ]
 
-mask_methods = [
-    lambda matrix, protected_matrix: mask(matrix=matrix, protected_matrix=protected_matrix, formula=formula) for formula in mask_formulas
-]
 
-
-def mask_matrix(matrix: np.array, protected_matrix: np.array) -> Tuple[np.array, int]:
+def mask_matrix(
+    matrix: np.array, protected_matrix: np.array
+) -> Tuple[np.array, int]:
     """
     Apply data masking: Evaluate each of the 8 masking patterns according to the 4 criterion, apply the correct one.
     """
     min_penalty = np.inf
-    selected_mask = None
-    mask_number = None
-    for mask_number, mask_method in enumerate(mask_methods):
-        penalty = get_penalty_score(mask_method(matrix=matrix, protected_matrix=protected_matrix))
+    selected_mask_number = None
+    for mask_number, formula in enumerate(mask_formulas):
+        penalty = get_penalty_score(mask(matrix=matrix, protected_matrix=protected_matrix, formula=formula))
         if penalty < min_penalty:
             min_penalty = penalty
-            selected_mask = mask_method
+            selected_mask_number = mask_number
 
-    return selected_mask(matrix=matrix, protected_matrix=protected_matrix), mask_number
+    return mask(matrix=matrix, protected_matrix=protected_matrix, formula=mask_formulas[selected_mask_number]), selected_mask_number
 
 
 def get_penalty_score(matrix: np.array) -> int:
@@ -43,7 +40,12 @@ def get_penalty_score(matrix: np.array) -> int:
     Evaluate the matrix according to all 4 evaluation criterion, and returning the sum.
     """
     penalty = 0
-    for method in [evaluate_by_row_and_column, evaluate_by_2_x_2_blocks, evaluate_by_finder_pattern, evaluate_by_ratio]:
+    for method in [
+        evaluate_by_row_and_column,
+        evaluate_by_2_x_2_blocks,
+        evaluate_by_finder_pattern,
+        evaluate_by_ratio,
+    ]:
         penalty += method(matrix)
 
     return penalty
@@ -85,7 +87,12 @@ def evaluate_by_2_x_2_blocks(matrix: np.array) -> int:
     """
     penalty = 0
     for indices in product(range(matrix.shape[0] - 1), repeat=2):
-        if matrix[indices] == matrix[indices[0], indices[1] + 1] == matrix[indices[0] + 1, indices[1]] == matrix[indices[0] + 1, indices[1] + 1]:
+        if (
+            matrix[indices]
+            == matrix[indices[0], indices[1] + 1]
+            == matrix[indices[0] + 1, indices[1]]
+            == matrix[indices[0] + 1, indices[1] + 1]
+        ):
             penalty += 3
 
     return penalty
@@ -110,7 +117,13 @@ def finder_pattern_penalty(array: np.array) -> int:
     """
     penalty = 0
     for i in range(len(array) - 11):
-        if np.array_equal(array[i:(i+11)], [True, False, True, True, True, False, True, False, False, False, False]) or np.array_equal(array[i:(i+11)], [False, False, False, False, True, False, True, True, True, False, True]):
+        if np.array_equal(
+            array[i : (i + 11)],
+            [True, False, True, True, True, False, True, False, False, False, False],
+        ) or np.array_equal(
+            array[i : (i + 11)],
+            [False, False, False, False, True, False, True, True, True, False, True],
+        ):
             penalty += 40
 
     return penalty
@@ -133,7 +146,6 @@ def mask(matrix: np.array, protected_matrix: np.array, formula: callable) -> np.
     """
     masked_matrix = copy.deepcopy(matrix)
     for indices in product(range(matrix.shape[0]), repeat=2):
-        if protected_matrix[indices] is False and formula(indices[0], indices[1]):
+        if protected_matrix[indices] == False and formula(indices[0], indices[1]):
             masked_matrix[indices] = not masked_matrix[indices]
     return masked_matrix
-

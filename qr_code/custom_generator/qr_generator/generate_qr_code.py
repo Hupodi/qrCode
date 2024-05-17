@@ -10,7 +10,11 @@ from qr_code.custom_generator.qr_generator.character_count import (
 from qr_code.custom_generator.qr_generator.encode_data import encode_data
 from qr_code.custom_generator.qr_generator.codewords_count import get_codewords_count
 from qr_code.custom_generator.qr_generator.error_correction import encode_message
-from qr_code.custom_generator.qr_generator.qr_matrix import get_qr_matrix, mask_matrix, format_matrix
+from qr_code.custom_generator.qr_generator.qr_matrix import (
+    get_qr_matrix,
+    mask_matrix,
+    format_matrix,
+)
 from qr_code.custom_generator.plot_png import plot_png
 
 
@@ -46,21 +50,25 @@ def generate_qr_code(
         bits=raw_data_bits, codewords_count=codewords_count
     )
 
-    corrected_bits = encode_message(raw_data_bits=raw_data_bits, version=version, error_correction_level=error_correction_level)
-    matrix, protected_matrix = get_qr_matrix(
-        bits=corrected_bits, version=version
+    corrected_bits = encode_message(
+        raw_data_bits=raw_data_bits,
+        version=version,
+        error_correction_level=error_correction_level,
     )
+    matrix, protected_matrix = get_qr_matrix(bits=corrected_bits, version=version)
     matrix, mask_number = mask_matrix(
-        matrix=matrix, protected_matrix=protected_matrix
+        matrix=matrix, protected_matrix=protected_matrix,
     )
     matrix = format_matrix(
-        error_correction_level=error_correction_level, matrix=matrix, mask_number=mask_number
+        error_correction_level=error_correction_level,
+        matrix=matrix,
+        mask_number=mask_number,
     )
     matrix = add_quiet_zone(matrix=matrix, quiet_zone_size=quiet_zone_size)
 
     # Debugging:
-    plot_png(matrix=matrix, output_file="test_matrix.png")
-    plot_png(matrix=protected_matrix, output_file="test_protected_matrix_matrix.png")
+    plot_png(matrix=matrix, output_file="test_matrix_custom.png")
+    plot_png(matrix=protected_matrix, output_file="test_protected_matrix.png")
 
     return matrix
 
@@ -91,7 +99,7 @@ def ensure_multiple_of_eight(bits: str) -> str:
     Ensure the data bits length is a multiple of 8, by adding 0s at the end.
     """
     remainder = len(bits) % 8
-    return bits + "0" * (8 - remainder)
+    return bits + "0" * remainder
 
 
 def fill_to_max_size(bits: str, codewords_count: int) -> str:

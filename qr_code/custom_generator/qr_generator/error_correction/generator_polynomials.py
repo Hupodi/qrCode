@@ -6,7 +6,7 @@ import pandas as pd
 
 
 LOG_TABLE = pd.read_csv(
-    "qr_code/custom_generator/qr_generator/error_correction/LogTable.csv"
+    Path(__file__).parent / "LogTable.csv"
 )
 
 
@@ -20,8 +20,9 @@ def get_all_generator_polynomials(n: int = 68):
         result[degree] = get_next_polynomial(result[degree - 1])
 
     with open(
-        "qr_code/custom_generator/qr_generator/error_correction/generatorPolynomial.json",
+        Path(__file__).parent / "generatorPolynomial.json",
         "w",
+        encoding="utf-8",
     ) as f:
         json.dump(result, f)
 

@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 import pandas as pd
 
@@ -15,13 +16,14 @@ from qr_code.custom_generator.qr_generator.error_correction.polynomial_division 
 
 
 with open(
-    "qr_code/custom_generator/qr_generator/error_correction/generatorPolynomial.json",
+    Path(__file__).parent / "generatorPolynomial.json",
     "r",
+    encoding="utf-8"
 ) as f:
     GENERATOR_POLYNOMIALS = json.load(f)
 
 REMAINDER_BITS = pd.read_csv(
-    "qr_code/custom_generator/qr_generator/error_correction/remainderBits.csv"
+    Path(__file__).parent / "remainderBits.csv"
 )
 
 
@@ -64,7 +66,7 @@ def encode_message(
             data_interleaved.append(block[index])
 
     data_interleaved_bits = "".join(
-        ["{0:08b}".format(int_value) for int_value in data_interleaved]
+        [f"{int_value:>08b}" for int_value in data_interleaved]
     )
     return add_remainder_bits(data_interleaved_bits, version)
 

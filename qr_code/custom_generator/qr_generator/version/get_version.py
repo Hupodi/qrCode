@@ -29,4 +29,4 @@ def get_version(
         raise ValueError(
             f"Message size {message_size} is too long to be supported with mode {mode} "
             f"and error correction level {error_correction_level.name}."
-        )
+        ) from err

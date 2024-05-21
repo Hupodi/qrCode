@@ -1,3 +1,4 @@
+# pylint: skip-file
 import qrcode
 
 img = qrcode.make("https://www.rugbyrama.fr/")

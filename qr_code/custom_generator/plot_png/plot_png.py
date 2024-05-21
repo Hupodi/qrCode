@@ -1,7 +1,7 @@
-import webcolors
 from typing import List, Tuple
 from itertools import product
 
+import webcolors
 import png
 import numpy as np
 
@@ -89,7 +89,8 @@ def get_background_matrix(
     background_rgb: List[int],
 ) -> np.array:
     """
-    Get a square matrix of the right size: (n * bloc_size, 3 x n * bloc_size), full of background_color.
+    Get a square matrix of the right size:
+        (n * bloc_size, 3 x n * bloc_size), full of background_color.
     """
     size = n * bloc_size
     return np.array([background_rgb * size] * size)
@@ -123,7 +124,8 @@ def draw_bloc(
     bloc_size: int,
 ) -> np.array:
     """
-    Draw a single bloc, by looping through each pixel of the bloc and filling the pixels with front_rgb triplets.
+    Draw a single bloc, by looping through each pixel of the bloc
+        and filling the pixels with front_rgb triplets.
     """
     for i in product(
         range(bloc_size * indices[0], bloc_size * (indices[0] + 1)),

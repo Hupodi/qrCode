@@ -13,7 +13,8 @@ def get_codewords_count(
     version: int, error_correction_level: ErrorCorrectionLevel
 ) -> int:
     """
-    Get the total number of bytes to fill, corresponding to the given QR code version and error correction level
+    Get the total number of bytes to fill,
+    corresponding to the given QR code version and error correction level
     """
     return CODEWORDS_TABLE.loc[
         (CODEWORDS_TABLE["Version"] == version)

@@ -18,21 +18,29 @@ mask_formulas = [
 ]
 
 
-def mask_matrix(
-    matrix: np.array, protected_matrix: np.array
-) -> Tuple[np.array, int]:
+def mask_matrix(matrix: np.array, protected_matrix: np.array) -> Tuple[np.array, int]:
     """
-    Apply data masking: Evaluate each of the 8 masking patterns according to the 4 criterion, apply the correct one.
+    Apply data masking:
+    Evaluate each of the 8 masking patterns according to the 4 criterion, apply the correct one.
     """
     min_penalty = np.inf
     selected_mask_number = None
     for mask_number, formula in enumerate(mask_formulas):
-        penalty = get_penalty_score(mask(matrix=matrix, protected_matrix=protected_matrix, formula=formula))
+        penalty = get_penalty_score(
+            mask(matrix=matrix, protected_matrix=protected_matrix, formula=formula)
+        )
         if penalty < min_penalty:
             min_penalty = penalty
             selected_mask_number = mask_number
 
-    return mask(matrix=matrix, protected_matrix=protected_matrix, formula=mask_formulas[selected_mask_number]), selected_mask_number
+    return (
+        mask(
+            matrix=matrix,
+            protected_matrix=protected_matrix,
+            formula=mask_formulas[selected_mask_number],
+        ),
+        selected_mask_number,
+    )
 
 
 def get_penalty_score(matrix: np.array) -> int:

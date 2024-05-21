@@ -15,7 +15,6 @@ from qr_code.custom_generator.qr_generator.qr_matrix import (
     mask_matrix,
     format_matrix,
 )
-from qr_code.custom_generator.plot_png import plot_png
 
 
 def generate_qr_code(
@@ -57,7 +56,8 @@ def generate_qr_code(
     )
     matrix, protected_matrix = get_qr_matrix(bits=corrected_bits, version=version)
     matrix, mask_number = mask_matrix(
-        matrix=matrix, protected_matrix=protected_matrix,
+        matrix=matrix,
+        protected_matrix=protected_matrix,
     )
     matrix = format_matrix(
         error_correction_level=error_correction_level,
@@ -65,10 +65,6 @@ def generate_qr_code(
         mask_number=mask_number,
     )
     matrix = add_quiet_zone(matrix=matrix, quiet_zone_size=quiet_zone_size)
-
-    # Debugging:
-    plot_png(matrix=matrix, output_file="test_matrix_custom.png")
-    plot_png(matrix=protected_matrix, output_file="test_protected_matrix.png")
 
     return matrix
 
@@ -104,7 +100,8 @@ def ensure_multiple_of_eight(bits: str) -> str:
 
 def fill_to_max_size(bits: str, codewords_count: int) -> str:
     """
-    Final step of raw bits padding, add 11101100 00010001 bytes until 8 * codewords_count is reached.
+    Final step of raw bits padding,
+    add 11101100 00010001 bytes until 8 * codewords_count is reached.
     """
     bytes_to_add = codewords_count - (len(bits) // 8)
     return (

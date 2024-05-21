@@ -12,7 +12,7 @@ def divide_polynomials(quotien: List[int], divisor: List[int]) -> List[int]:
     # running_quotien = [get_exponent(int_value) for int_value in quotien]
     running_quotien_ints = quotien
 
-    for step in range(steps):
+    for _ in range(steps):
         multiplication_exponent = get_exponent(running_quotien_ints[0])
         multiplied_polynomial = [
             (exponent + multiplication_exponent) % 255 for exponent in divisor
@@ -47,5 +47,4 @@ def modulo_if_too_high(exponent: int) -> int:
     """
     if exponent > 255:
         return exponent % 255
-    else:
-        return exponent
+    return exponent

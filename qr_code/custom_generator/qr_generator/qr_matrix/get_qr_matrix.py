@@ -12,7 +12,7 @@ ALIGNMENT_PATTERNS_TABLE = pd.read_csv(
 
 def get_qr_matrix(bits: str, version: int) -> Tuple[np.array, np.array]:
     """
-    From the encoded bits get the QR code boolean matrix
+    From the encoded bits get the QR code boolean matrix and the matrix of protected modules.
     """
     size = get_matrix_size(version)
     matrix = np.full((size, size), False)
@@ -80,7 +80,7 @@ def add_finder_pattern(
     """
     for offset in product(range(7), repeat=2):
         indices = tuple(
-            [index + offset for index, offset in zip(offset, top_left_indices)]
+            index + offset for index, offset in zip(offset, top_left_indices)
         )
         protected_matrix[indices] = True
 
@@ -138,7 +138,8 @@ def add_alignment_pattern(
     matrix: np.array, protected_matrix: np.array, center_indices: Tuple[int, int]
 ) -> Tuple[np.array, np.array]:
     """
-    Add a single alignment pattern centered at center_indices, if it does not overlap with finder patterns
+    Add a single alignment pattern centered at center_indices,
+        if it does not overlap with finder patterns
     """
     if (
         protected_matrix[(center_indices[0] - 2, center_indices[1] - 2)] == True
@@ -150,7 +151,7 @@ def add_alignment_pattern(
 
     for offset in product(range(-2, 3), repeat=2):
         indices = tuple(
-            [index + offset for index, offset in zip(offset, center_indices)]
+            index + offset for index, offset in zip(offset, center_indices)
         )
         protected_matrix[indices] = True
 
@@ -171,7 +172,8 @@ def add_timing_patterns(
     matrix: np.array, protected_matrix: np.array
 ) -> Tuple[np.array, np.array]:
     """
-    Add timing patterns: row 6 and col 6. No need to worry about alignment patterns, they always coincide.
+    Add timing patterns: row 6 and col 6.
+    No need to worry about alignment patterns, they always coincide.
     """
     alternating_value = True  # Start with a black square
     for index in range(6, matrix.shape[0] - 7):
@@ -235,14 +237,15 @@ def place_bits(
     """
     if len(bits) != (matrix.shape[0] ** 2 - protected_matrix.sum()):
         raise ValueError(
-            f"Encoded message Bits size {len(bits)} is different than the available slots in the matrix ({(matrix.shape[0] ** 2 - protected_matrix.sum())})."
+            f"Encoded message Bits size {len(bits)} is different than the "
+            f"available slots in the matrix ({(matrix.shape[0] ** 2 - protected_matrix.sum())})."
         )
     row_direction = -1
     row = matrix.shape[0] - 1
     column = matrix.shape[0] - 1
     column_offset = False
 
-    for i, bit in enumerate(bits):
+    for bit in bits:
         while protected_matrix[row, column - column_offset] == True:
             row_direction, row, column, column_offset = move_cursor(
                 row_direction, row, column, column_offset, matrix.shape[0]

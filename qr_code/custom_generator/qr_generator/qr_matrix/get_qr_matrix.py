@@ -142,10 +142,10 @@ def add_alignment_pattern(
         if it does not overlap with finder patterns
     """
     if (
-        protected_matrix[(center_indices[0] - 2, center_indices[1] - 2)] == True
-        or protected_matrix[(center_indices[0] - 2, center_indices[1] + 2)] == True
-        or protected_matrix[(center_indices[0] + 2, center_indices[1] - 2)] == True
-        or protected_matrix[(center_indices[0] + 2, center_indices[1] + 2)] == True
+        protected_matrix[(center_indices[0] - 2, center_indices[1] - 2)]
+        or protected_matrix[(center_indices[0] - 2, center_indices[1] + 2)]
+        or protected_matrix[(center_indices[0] + 2, center_indices[1] - 2)]
+        or protected_matrix[(center_indices[0] + 2, center_indices[1] + 2)]
     ):
         return matrix, protected_matrix
 
@@ -246,7 +246,7 @@ def place_bits(
     column_offset = False
 
     for bit in bits:
-        while protected_matrix[row, column - column_offset] == True:
+        while protected_matrix[row, column - column_offset]:
             row_direction, row, column, column_offset = move_cursor(
                 row_direction, row, column, column_offset, matrix.shape[0]
             )

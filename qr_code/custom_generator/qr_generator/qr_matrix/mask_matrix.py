@@ -154,6 +154,6 @@ def mask(matrix: np.array, protected_matrix: np.array, formula: callable) -> np.
     """
     masked_matrix = copy.deepcopy(matrix)
     for indices in product(range(matrix.shape[0]), repeat=2):
-        if protected_matrix[indices] == False and formula(indices[0], indices[1]):
+        if not protected_matrix[indices] and formula(indices[0], indices[1]):
             masked_matrix[indices] = not masked_matrix[indices]
     return masked_matrix
